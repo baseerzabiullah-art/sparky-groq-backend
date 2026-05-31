@@ -1,9 +1,0 @@
-{
-  "name": "sparky-groq-backend",
-  "version": "1.0.0",
-  "description": "Sparky homework helper with Groq AI",
-  "main": "index.js",
-  "dependencies": {
-    "groq-sdk": "^0.4.0"
-  }
-}
