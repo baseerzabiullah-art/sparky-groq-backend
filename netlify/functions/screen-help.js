@@ -13,33 +13,24 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { imageBase64 } = JSON.parse(event.body);
+    const { pageText } = JSON.parse(event.body);
 
-    if (!imageBase64) {
+    if (!pageText) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "imageBase64 is required" }),
+        body: JSON.stringify({ error: "pageText is required" }),
       };
     }
 
+    const limitedText = pageText.substring(0, 3000);
+
     const message = await client.chat.completions.create({
-      model: "llama-2-vision-90b",
+      model: "mixtral-8x7b-32768",
       max_tokens: 1024,
       messages: [
         {
           role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/png;base64,${imageBase64}`,
-              },
-            },
-            {
-              type: "text",
-              text: "Please analyze this homework/study question and provide a clear, helpful answer with step-by-step explanation if needed.",
-            },
-          ],
+          content: `Please analyze this page content and provide helpful homework/study assistance. Focus on key concepts, explanations, and answers to any questions visible on the page.\n\nPage content:\n${limitedText}`,
         },
       ],
     });
